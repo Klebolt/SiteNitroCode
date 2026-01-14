@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="NitroCode - Desenvolvimento Web e Automação Python. Solicite sua análise técnica sem custo.">
+    <meta name="theme-color" content="#030303">
+    <title>NitroCode | High Performance Solutions</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        /* =========================================
+           1. CORE & VARIÁVEIS
+           ========================================= */
+        :root {
+            --bg-deep: #030303;
+            --bg-surface: #0f0f0f;
+            --text-main: #ffffff;
+            --text-muted: #999999;
+            --border: rgba(255, 255, 255, 0.08);
+            --neon-green: #00ff41;
+            
+            --font-display: 'Outfit', sans-serif;
+            --font-code: 'Space Mono', monospace;
+            
+            --ease-out: cubic-bezier(0.215, 0.61, 0.355, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: var(--font-display);
+            overflow-x: hidden;
+            line-height: 1.6;
+            background-image: 
+                radial-gradient(circle at 50% 0%, #1a1a1a 0%, transparent 70%),
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 100% 100%, 40px 40px, 40px 40px;
+        }
+
+        /* =========================================
+           2. UTILITÁRIOS & ANIMAÇÕES
+           ========================================= */
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 2; }
+        
+        /* Texto Gradiente (Brilho Metálico) */
+        .gradient-text {
+            background: linear-gradient(90deg, #ffffff, #888888, #ffffff);
+            background-size: 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 4s linear infinite;
+        }
+        @keyframes shine { 0% { background-position: 0%; } 100% { background-position: 200%; } }
+
+        /* Efeito de Revelação */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s var(--ease-out);
+        }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* Botão Principal (Glow) */
+        .btn-glow {
+            position: relative;
+            background: #fff;
+            color: #000;
+            padding: 20px 45px;
+            font-family: var(--font-code);
+            font-weight: 700;
+            font-size: 1rem;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s;
+            overflow: hidden;
+            letter-spacing: 1px;
+        }
+        
+        .btn-glow:hover { 
+            transform: translateY(-4px); 
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.3);
+            letter-spacing: 2px; /* Expansão sutil */
+        }
+
+        /* =========================================
+           3. HEADER
+           ========================================= */
+        header {
+            position: fixed;
+            top: 0; width: 100%; z-index: 100;
+            padding: 20px 0;
+            background: rgba(3, 3, 3, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .nav-flex { display: flex; justify-content: space-between; align-items: center; }
+        
+        .brand-logo {
+            height: 42px; width: auto;
+            border-radius: 6px;
+            display: block;
+            transition: transform 0.3s;
+        }
+        .brand-logo:hover { transform: scale(1.05); }
+        
+        .badge-free {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-family: var(--font-code);
+            color: #ccc;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .dot { width: 6px; height: 6px; background: var(--neon-green); border-radius: 50%; box-shadow: 0 0 10px var(--neon-green); animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
+
+        /* =========================================
+           4. HERO SECTION
+           ========================================= */
+        .hero {
+            min-height: 95vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding-top: 80px;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 9vw, 5.5rem);
+            font-weight: 800;
+            line-height: 1.05;
+            margin-bottom: 25px;
+            letter-spacing: -2px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 680px;
+            margin: 0 auto 45px auto;
+            font-weight: 300;
+        }
+
+        /* =========================================
+           5. MARQUEE (Faixa Tech)
+           ========================================= */
+        .marquee-container {
+            background: var(--bg-surface);
+            border-block: 1px solid var(--border);
+            padding: 20px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            user-select: none;
+            opacity: 0.8;
+        }
+        .marquee-content { display: inline-block; animation: marquee 30s linear infinite; }
+        .tech-tag {
+            font-family: var(--font-code);
+            color: #555;
+            font-size: 0.9rem;
+            margin: 0 50px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* =========================================
+           6. SERVICES
+           ========================================= */
+        .features { padding: 120px 0; }
+        
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border);
+            padding: 40px;
+            border-radius: 16px;
+            transition: 0.4s;
+        }
+
+        .card:hover {
+            background: rgba(255,255,255,0.04);
+            border-color: rgba(255,255,255,0.2);
+            transform: translateY(-10px);
+        }
+
+        .card h3 { font-size: 1.4rem; margin-bottom: 15px; color: #fff; }
+        .card p { color: var(--text-muted); font-size: 0.95rem; }
+        .icon-box { font-size: 2.2rem; margin-bottom: 25px; display: block; filter: grayscale(1); transition: 0.4s; }
+        .card:hover .icon-box { filter: grayscale(0); transform: scale(1.1); }
+
+        /* =========================================
+           7. ZERO COST (O Grande Destaque)
+           ========================================= */
+        .zero-cost {
+            padding: 140px 0;
+            background: linear-gradient(to bottom, var(--bg-deep), #080808, var(--bg-deep));
+            text-align: center;
+        }
+
+        .price-container {
+            border: 1px solid var(--border);
+            background: rgba(20, 20, 20, 0.4);
+            backdrop-filter: blur(10px);
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            border-radius: 24px;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+        }
+
+        .price-display {
+            font-family: var(--font-code);
+            font-size: clamp(4rem, 10vw, 6rem);
+            font-weight: 700;
+            color: #fff;
+            margin: 20px 0;
+            letter-spacing: -4px;
+            /* Efeito Neon Verde */
+            text-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+        }
+        
+        .price-tag {
+            color: var(--neon-green);
+            font-family: var(--font-code);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+            border: 1px solid var(--neon-green);
+            padding: 5px 15px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        /* =========================================
+           8. CTA FINAL
+           ========================================= */
+        .cta-final { padding-bottom: 120px; text-align: center; }
+
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 40px;
+            text-align: center;
+            font-family: var(--font-code);
+            font-size: 0.8rem;
+            color: #444;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .btn-glow { width: 100%; justify-content: center; }
+            .grid-3 { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container nav-flex">
+            <a href="#" style="text-decoration:none;">
+                <img src="img/logo_oficial_cortado.png" alt="NitroCode" class="brand-logo">
+            </a>
+            <div class="badge-free">
+                <span class="dot"></span> Consultoria Gratuita
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container reveal active">
+            <span style="font-family: var(--font-code); color: var(--neon-green); font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; display: block;">
+                /// V2.0 System Online
+            </span>
+            
+            <h1>Engenharia que <br><span class="gradient-text">Escala Negócios.</span></h1>
+            
+            <p>
+                Transformamos processos manuais em automação inteligente. 
+                Tenha um site de alta performance e sistemas que trabalham enquanto você dorme.
+            </p>
+            
+            <a href="LINK_DO_SEU_OUTRO_PROJETO_AQUI" class="btn-glow">
+                Solicitar Análise Técnica
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            
+            <p style="margin-top: 20px; font-size: 0.8rem; color: #555; font-family: var(--font-code);">
+                * Disponibilidade limitada para novos projetos.
+            </p>
+        </div>
+    </section>
+
+    <div class="marquee-container">
+        <div class="marquee-content">
+            <span class="tech-tag">AUTOMATION</span>
+            <span class="tech-tag">FULLSTACK DEV</span>
+            <span class="tech-tag">DATA INTELLIGENCE</span>
+            <span class="tech-tag">HIGH PERFORMANCE</span>
+            <span class="tech-tag">AUTOMATION</span>
+            <span class="tech-tag">FULLSTACK DEV</span>
+            <span class="tech-tag">DATA INTELLIGENCE</span>
+            <span class="tech-tag">HIGH PERFORMANCE</span>
+        </div>
+    </div>
+
+    <section class="features">
+        <div class="container">
+            <div class="reveal">
+                <h2 style="font-size: 2.5rem; margin-bottom: 10px; text-align: center;">O Poder do Código</h2>
+                <p style="text-align: center; color: var(--text-muted); margin-bottom: 50px;">Soluções desenhadas para eliminar ineficiências.</p>
+            </div>
+
+            <div class="grid-3">
+                <div class="card reveal">
+                    <span class="icon-box">⚡</span>
+                    <h3>Sites de Alta Conversão</h3>
+                    <p>Websites institucionais e Landing Pages programadas para serem instantâneas. Sem carregamento lento, sem perder clientes.</p>
+                </div>
+                <div class="card reveal">
+                    <span class="icon-box">🤖</span>
+                    <h3>Robôs de Automação</h3>
+                    <p>Scripts Python que assumem o trabalho chato. Leitura de e-mails, preenchimento de planilhas e emissão de notas fiscais no piloto automático.</p>
+                </div>
+                <div class="card reveal">
+                    <span class="icon-box">📊</span>
+                    <h3>Sistemas de Gestão</h3>
+                    <p>Dashboards personalizados. Tenha o controle total da sua operação em uma única tela, acessível de qualquer lugar.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="zero-cost">
+        <div class="container reveal">
+            <div class="price-container">
+                <span class="price-tag">Investimento Inicial</span>
+                
+                <div class="price-display">R$ 0,00</div>
+                
+                <h3 style="margin-bottom: 20px; font-weight: 400; color: #fff;">Para Análise de Viabilidade</h3>
+                <p style="color: var(--text-muted); line-height: 1.6;">
+                    Não cobramos para entender seu desafio. Utilize nosso <strong>Control Center</strong> exclusivo para enviar sua demanda e receber uma proposta técnica detalhada.
+                </p>
+                
+                <div style="margin-top: 30px; opacity: 0.5;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" style="animation: bounce 2s infinite;"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
+                </div>
+                <style>@keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-10px);} 60% {transform: translateY(-5px);} }</style>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-final">
+        <div class="container reveal">
+            <h2 style="font-size: 2.5rem; margin-bottom: 40px; letter-spacing: -1px;">Pronto para o Próximo Nível?</h2>
+            
+            <a href="LINK_DO_SEU_OUTRO_PROJETO_AQUI" class="btn-glow" style="background: var(--neon-green); color: #000; border: none; box-shadow: 0 0 30px rgba(0,255,65,0.4);">
+                ACESSAR CONTROL CENTER
+            </a>
+            
+            <p style="margin-top: 30px; font-family: var(--font-code); font-size: 0.8rem; color: #666;">
+                Acesso Seguro • Criptografado • Resposta em até 24h
+            </p>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 NitroCode. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Scroll Reveal
+        window.addEventListener('scroll', reveal);
+        function reveal() {
+            var reveals = document.querySelectorAll('.reveal');
+            for(var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var revealTop = reveals[i].getBoundingClientRect().top;
+                if(revealTop < windowHeight - 50) {
+                    reveals[i].classList.add('active');
+                }
+            }
+        }
+        reveal();
+    </script>
+</body>
+</html>
